@@ -1,25 +1,57 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import PoemList from './PoemList';
+import './app.css';
 
 class App extends Component {
+
+  state = {
+    isFiltered: false,
+    pendingGuest: "",
+    poems: []
+  };
+
+  componentDidMount(){
+    fetch('http://poetrydb.org/author').then(results => {
+      console.log("this are authors ", results.json())
+        
+    });
+}
+
+
   render() {
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+        <header>
+          <h1>Poetry Hub</h1>
+          <p>A Bonifase App</p>
+          <form onSubmit={this.newGuestSubmitHandler}>
+            <input
+              type="text"
+              onChange={this.handleNameInput}
+              value={this.state.pendingGuest}
+              placeholder="Search your Author" />
+            <button type="submit" name="submit" value="submit">Search</button>
+          </form>
         </header>
+        <div className="main">
+          <div>
+            <h2>Invitees</h2>
+            <label>
+              <input
+                type="checkbox"
+                onChange={this.toggleFilter}
+                checked={this.state.isFiltered} /> Hide those who haven't responded
+            </label>
+          </div>
+
+
+          <PoemList
+            poems={this.state.poems} 
+          />
+
+        </div>
       </div>
     );
   }
